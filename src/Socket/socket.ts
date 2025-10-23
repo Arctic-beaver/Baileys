@@ -104,6 +104,18 @@ export const makeSocket = (config: SocketConfig) => {
 
 	const ws = new WebSocketClient(url, config)
 
+	const req: any = (ws as any)._req
+	if (req) {
+		req.on('error', (err: Error) => {
+			ws.emit('error', err)
+		})
+		req.on('socket', (sock: any) => {
+			sock.on('error', (err: Error) => {
+				ws.emit('error', err)
+			})
+		})
+	}
+
 	ws.connect()
 
 	const sendPromise = promisify(ws.send)
