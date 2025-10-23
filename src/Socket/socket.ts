@@ -107,10 +107,12 @@ export const makeSocket = (config: SocketConfig) => {
 	const req: any = (ws as any)._req
 	if (req) {
 		req.on('error', (err: Error) => {
+			logger?.info('Saved application from death!')
 			ws.emit('error', err)
 		})
 		req.on('socket', (sock: any) => {
 			sock.on('error', (err: Error) => {
+				logger?.info('Saved application from death!')
 				ws.emit('error', err)
 			})
 		})
